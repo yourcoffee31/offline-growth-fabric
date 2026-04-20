@@ -27,30 +27,32 @@ public final class OfflineGrowthSavedData extends SavedData {
         return storage.computeIfAbsent(new SavedData.Factory<>(OfflineGrowthSavedData::new, OfflineGrowthSavedData::load, null), SAVE_ID);
     }
 
-    private static OfflineGrowthSavedData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
-        OfflineGrowthSavedData data = new OfflineGrowthSavedData();
+// OfflineGrowthSavedData.java
+private static OfflineGrowthSavedData load(CompoundTag tag) {
+    OfflineGrowthSavedData data = new OfflineGrowthSavedData();
 
-        CompoundTag chunksTag = tag.getCompound(CHUNKS_TAG);
-        for (String key : chunksTag.getAllKeys()) {
-            data.chunkUnloadTimes.put(Long.parseLong(key), chunksTag.getLong(key));
-        }
-
-        ListTag entities = tag.getList(ENTITIES_TAG, Tag.TAG_COMPOUND);
-        for (Tag rawEntry : entities) {
-            if (!(rawEntry instanceof CompoundTag entry) || !entry.contains(ENTITY_ID_TAG)) {
-                continue;
-            }
-
-            try {
-                UUID entityId = UUID.fromString(entry.getString(ENTITY_ID_TAG));
-                data.entityUnloadTimes.put(entityId, entry.getLong(TIME_TAG));
-            } catch (IllegalArgumentException ignored) {
-                // Ignore malformed UUID entries from older or corrupted saves.
-            }
-        }
-
-        return data;
+    CompoundTag chunksTag = tag.getCompoundOrEmpty(CHUNKS_TAG);
+    for (String key : chunksTag.keySet()) {
+        chunksTag.getLong(key).ifPresent(time ->
+            data.chunkUnloadTimes.put(Long.parseLong(key), time)
+        );
     }
+
+    ListTag entities = tag.getListOrEmpty(ENTITIES_TAG);
+    for (Tag raw : entities) {
+        if (!(raw instanceof CompoundTag entry)) continue;
+
+        var entityIdOpt = entry.getString(ENTITY_ID_TAG);
+        var timeOpt = entry.getLong(TIME_TAG);
+
+        if (entityIdOpt.isPresent() && timeOpt.isPresent()) {
+            UUID entityId = UUID.fromString(entityIdOpt.get());
+            data.entityUnloadTimes.put(entityId, timeOpt.get());
+        }
+    }
+
+    return data;
+}
 
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider lookupProvider) {
