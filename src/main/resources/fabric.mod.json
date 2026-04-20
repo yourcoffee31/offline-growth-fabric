@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "offline_growth",
+  "version": "${version}",
+  "name": "Offline Growth",
+  "description": "Lets plants and baby mobs continue maturing while their chunks are unloaded by simulating catch-up when the chunk/entity loads again.",
+  "authors": [
+    "OpenAI for Flowey Killer"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/offline_growth/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ru.floweykill27.offlinegrowth.OfflineGrowthMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.1",
+    "minecraft": "1.21.10",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
