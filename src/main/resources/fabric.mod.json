@@ -16,10 +16,10 @@
       "ru.floweykill27.offlinegrowth.OfflineGrowthMod"
     ]
   },
-  "depends": {
-    "fabricloader": ">=0.19.1",
-    "minecraft": "1.21.10",
-    "java": ">=21",
-    "fabric-api": "*"
-  }
+"depends": {
+  "fabricloader": ">=0.18.4",
+  "minecraft": "1.21.10",
+  "java": ">=21",
+  "fabric-api": "*"
+}
 }
