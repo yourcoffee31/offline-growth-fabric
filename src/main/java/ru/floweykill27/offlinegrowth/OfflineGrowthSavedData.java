@@ -22,10 +22,12 @@ public final class OfflineGrowthSavedData extends SavedData {
     private final Map<Long, Long> chunkUnloadTimes = new HashMap<>();
     private final Map<UUID, Long> entityUnloadTimes = new HashMap<>();
 
-    public static OfflineGrowthSavedData get(ServerLevel level) {
-        DimensionDataStorage storage = level.getDataStorage();
-        return storage.computeIfAbsent(new SavedData.Factory<>(OfflineGrowthSavedData::new, OfflineGrowthSavedData::load, null), SAVE_ID);
-    }
+public static final SavedDataType<OfflineGrowthSavedData> TYPE =
+    new SavedDataType<>(SAVE_ID, OfflineGrowthSavedData::new, CODEC, DataFixTypes.LEVEL);
+
+public static OfflineGrowthSavedData get(ServerLevel level) {
+    return level.getDataStorage().computeIfAbsent(TYPE);
+}
 
 // OfflineGrowthSavedData.java
 private static OfflineGrowthSavedData load(CompoundTag tag) {
