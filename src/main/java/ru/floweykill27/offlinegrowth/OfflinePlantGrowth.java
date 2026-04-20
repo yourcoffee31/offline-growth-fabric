@@ -44,8 +44,8 @@ public final class OfflinePlantGrowth {
         RandomSource random = RandomSource.create(chunk.getPos().toLong() ^ world.getGameTime());
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         LevelChunkSection[] sections = chunk.getSections();
-        int minBuildHeight = world.getMinBuildHeight();
-
+// OfflinePlantGrowth.java
+int minBuildHeight = world.getMinY();
         for (int sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
             LevelChunkSection section = sections[sectionIndex];
             if (section == null || section.hasOnlyAir()) {
